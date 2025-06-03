@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import zipfile
+import json
 
 #from asr import transcribe_audio
 
@@ -55,6 +56,16 @@ def save_transcriptions():
                 transcription = st.session_state.get(transcription_key, "")
                 score_key = f"score_{file}"
                 score = st.session_state.get(score_key, "")
+
+                if transcription:
+                    transcriptions[file] = {
+                        "filename": file,
+                        "transcription": transcription,
+                        "score": score
+                    }
+    # Save to a JSON file
+    with open("transcriptions.json", "w") as f:
+        json.dump(transcriptions, f, indent=4)
 
 
 st.button("Save Transcriptions", on_click=lambda: st.success("Transcriptions saved!"))
