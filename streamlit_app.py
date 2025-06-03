@@ -35,37 +35,29 @@ for root, dirs, files in os.walk("extracted_files"):
             if st.button("Evaluate", key=evaluation_key):
                 transctiption_key = f"transcription_{file}"
                 #transcription = transcribe_audio(file)
-                st.text_area("Transcription", key=transctiption_key, value="Transcription will appear here.", height=300)
+                transcription = "This is a placeholder for the transcription result."
+                st.text_area("Transcription", key=transctiption_key, value=transcription, height=200)
 
 def save_transcriptions():
-    # Save a json file with the transcriptions in the format:
-    """
-    {
-        "response_id": {
-            "filename": "filename.wav",
-            "transcription": "transcription text",
-            "score": "score text"
-        }
-    }
-    """
+    # Save a json file with the transcriptions in the format
     transcriptions = {}
     for root, dirs, files in os.walk("extracted_files"):
         for file in files:
             if file.endswith(".wav") or file.endswith(".mp3"):
                 transcription_key = f"transcription_{file}"
                 transcription = st.session_state.get(transcription_key, "")
-                score_key = f"score_{file}"
-                score = st.session_state.get(score_key, "")
+                #score_key = f"score_{file}"
+                #score = st.session_state.get(score_key, "")
 
                 if transcription:
                     transcriptions[file] = {
                         "filename": file,
                         "transcription": transcription,
-                        "score": score
+                        "score": 50 #score
                     }
     # Save to a JSON file
     with open("transcriptions.json", "w") as f:
         json.dump(transcriptions, f, indent=4)
 
 
-st.button("Save Transcriptions", on_click=lambda: st.success("Transcriptions saved!"))
+st.button("Save Transcriptions", on_click=save_transcriptions)
